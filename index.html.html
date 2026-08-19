@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>AuftragPro</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:#0b1220;color:#fff;padding:16px;position:sticky;top:0;z-index:20}.brand{font-size:24px;font-weight:900}.brand span{color:#60a5fa}.role{float:right;background:#1e293b;padding:7px 10px;border-radius:20px;font-size:12px}
+main{max-width:1000px;margin:auto;padding:14px 14px 95px}.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin-bottom:14px}
+h1,h2,h3{margin-top:0}.muted{color:#6b7280}.grid2,.grid3,.grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{grid-template-columns:repeat(2,1fr)}
+button{border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;cursor:pointer}.primary{background:#2563eb;color:#fff}.success{background:#16a34a;color:#fff}.danger{background:#dc2626;color:#fff}.dark{background:#334155;color:#fff}.orange{background:#ea580c;color:#fff}.purple{background:#7c3aed;color:#fff}.teal{background:#0f766e;color:#fff}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:10px;font:inherit;background:#fff}.field{margin:9px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:5px}
+.big{min-height:98px;color:#fff}.big b{font-size:25px;display:block;margin-bottom:4px}.industry{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;text-align:left}.industry.active{background:#2563eb;color:#fff}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.badge{padding:5px 9px;border-radius:20px;font-size:11px;font-weight:900;white-space:nowrap}.green{background:#dcfce7;color:#166534}.yellow{background:#fef3c7;color:#92400e}.red{background:#fee2e2;color:#991b1b}.blue{background:#dbeafe;color:#1d4ed8}
+.stat{background:#f8fafc;border-radius:12px;padding:13px}.stat strong{font-size:25px;display:block;margin-top:3px}.hide{display:none!important}.clock{text-align:center;font-size:34px;font-weight:900;margin:8px 0}
+.listitem{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:8px 0}.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:center;gap:8px;padding:8px;z-index:30}.bottom button{background:#fff;color:#64748b}.bottom .active{color:#2563eb}
+.filebox{border:2px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center}.small{font-size:12px}.tabbar{display:flex;gap:7px;overflow:auto;margin-bottom:12px}.tabbar button{white-space:nowrap;background:#eef2f7;color:#475569}.tabbar button.active{background:#2563eb;color:#fff}.pillbtn{padding:8px 10px;font-size:12px}
+@media(min-width:720px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}.grid4{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><span class="brand">Auftrag<span>Pro</span></span><span id="role" class="role">MITARBEITER</span></header>
+
+<main>
+<!-- MITARBEITER -->
+<section id="employee">
+<div class="panel">
+<h2>Branche</h2><p class="muted">AuftragPro passt die Standardaufgaben an den Betrieb an.</p>
+<div id="industries" class="grid3"></div>
+</div>
+
+<div class="card">
+<div class="row"><div><h2 id="jobTitle">Musterauftrag</h2><div class="muted"><span id="customerName">Musterkunde GmbH</span> · <span id="jobNumber">AP-0001</span></div></div><span class="badge green">AKTIV</span></div>
+<p class="muted" id="jobAddress">Musterstraße 24, 56567 Musterstadt</p>
+<div class="grid2"><button class="primary" onclick="alert('Kundenruf wird vorbereitet.')">☎ Kunde anrufen</button><button class="dark" onclick="location.href='https://maps.apple.com/?q=Musterstraße%2024%2056567%20Musterstadt'">⌖ Navigation</button></div>
+</div>
+
+<div class="panel"><h2>Stempelzeit</h2><div id="clock" class="clock">00:00:00</div><p id="stampText" class="muted" style="text-align:center">Noch nicht eingestempelt</p>
+<div class="grid2"><button class="success big" onclick="startWork()"><b>▶</b>ARBEIT BEGINNEN</button><button class="danger big" onclick="stopWork()"><b>■</b>ARBEIT BEENDEN</button></div></div>
+
+<div class="panel"><h2>Aufgaben</h2><div id="tasks"></div></div>
+<div class="grid2">
+<button class="orange big" onclick="showBox('missingMaterial')"><b>!</b>MATERIAL FEHLT</button>
+<button class="purple big" onclick="showBox('usedMaterial')"><b>＋</b>MATERIAL VERBAUT</button>
+<button class="primary big" onclick="showBox('employeeFilesBox')"><b>▣</b>FOTOS / ZEICHNUNGEN</button>
+<button class="dark big" onclick="showBox('note')"><b>✎</b>NOTIZ</button>
+</div>
+<div id="missingMaterial" class="panel hide"><h2>Material fehlt</h2>
+<div class="field"><label>Material</label><input id="missingName" placeholder="z. B. Kabel 3x1,5"></div>
+<div class="field"><label>Menge</label><input id="missingQty" type="number" min="0" placeholder="Menge"></div>
+<div class="field"><label>Priorität</label><select id="missingPriority"><option>Normal</option><option>Dringend</option><option>Sofort</option></select></div>
+<button class="primary" onclick="addMaterialRequest()">AN CHEF MELDEN</button></div>
+<div id="usedMaterial" class="panel hide"><h2>Material verbaut</h2>
+<div class="field"><label>Material</label><input id="usedName" placeholder="Material"></div>
+<div class="field"><label>Menge</label><input id="usedQty" type="number" min="0" placeholder="Menge"></div>
+<button class="purple" onclick="saveUsedMaterial()">SPEICHERN</button></div>
+<div id="employeeFilesBox" class="panel hide"><h2>Fotos / Zeichnungen</h2><div class="filebox"><input id="employeeFiles" type="file" accept="image/*,.pdf,.jpg,.jpeg,.png" multiple onchange="saveFiles('employeeFiles')"><p class="muted">Fotos oder PDFs auswählen.</p></div></div>
+<div id="note" class="panel hide"><h2>Baustellennotiz</h2><textarea id="employeeNote" rows="5" placeholder="Notiz zur Baustelle..."></textarea><br><br><button class="dark" onclick="saveEmployeeNote()">NOTIZ SPEICHERN</button></div>
+</section>
+
+<!-- CHEF -->
+<section id="boss" class="hide">
+<div class="panel">
+<div class="row"><h2>Chef-Dashboard</h2><span class="badge green">BETRIEB</span></div>
+<div class="grid4">
+<div class="stat"><small>Aufträge</small><strong id="statJobs">0</strong></div>
+<div class="stat"><small>Kunden</small><strong id="statCustomers">0</strong></div>
+<div class="stat"><small>Offene Rechnungen</small><strong id="statOpen">0 €</strong></div>
+<div class="stat"><small>Bezahlt</small><strong id="statPaid">0 €</strong></div>
+</div></div>
+
+<div class="tabbar">
+<button class="active" onclick="chefTab('dashboard',this)">Dashboard</button>
+<button onclick="chefTab('customers',this)">Kunden</button>
+<button onclick="chefTab('orders',this)">Aufträge</button>
+<button onclick="chefTab('material',this)">Material</button>
+<button onclick="chefTab('docs',this)">Zeichnungen</button>
+<button onclick="chefTab('times',this)">Arbeitszeiten</button>
+<button onclick="chefTab('invoices',this)">Rechnungen</button>
+<button onclick="chefTab('employees',this)">Mitarbeiter</button>
+</div>
+
+<div id="chef-dashboard">
+<div class="panel"><h2>Schnellzugriff</h2><div class="grid2">
+<button class="primary" onclick="chefTab('customers');showBox('customerForm')">+ KUNDE ANLEGEN</button>
+<button class="primary" onclick="chefTab('orders');showBox('orderForm')">+ AUFTRAG ANLEGEN</button>
+<button class="primary" onclick="chefTab('invoices');showBox('invoiceForm')">+ RECHNUNG ANLEGEN</button>
+<button class="dark" onclick="chefTab('docs')">ZEICHNUNG / DOKUMENT HINZUFÜGEN</button>
+</div></div>
+<div class="panel"><h2>Offene Punkte</h2><div id="dashboardAlerts"></div></div>
+</div>
+
+<div id="chef-customers" class="hide"><div class="panel"><div class="row"><h2>Kunden</h2><button class="primary pillbtn" onclick="showBox('customerForm')">+ KUNDE</button></div>
+<div id="customerForm" class="hide"><h3>Neuer Kunde</h3>
+<div class="field"><label>Name / Firma</label><input id="newCustomerName" placeholder="Muster GmbH"></div><div class="field"><label>Telefon</label><input id="newCustomerPhone"></div><div class="field"><label>E-Mail</label><input id="newCustomerEmail" type="email"></div><div class="field"><label>Adresse</label><input id="newCustomerAddress"></div>
+<button class="primary" onclick="createCustomer()">KUNDE SPEICHERN</button></div><div id="customerList"></div></div></div>
+
+<div id="chef-orders" class="hide"><div class="panel"><div class="row"><h2>Aufträge</h2><button class="primary pillbtn" onclick="showBox('orderForm')">+ AUFTRAG</button></div>
+<div id="orderForm" class="hide"><h3>Neuer Auftrag</h3>
+<div class="field"><label>Kunde</label><select id="orderCustomer"></select></div><div class="field"><label>Auftrag</label><input id="newOrderTitle" placeholder="z. B. Elektroinstallation"></div><div class="field"><label>Baustellenadresse</label><input id="newOrderAddress"></div><div class="field"><label>Branche</label><select id="newOrderIndustry"></select></div><div class="field"><label>Auftragswert netto</label><input id="newOrderValue" type="number" min="0" step="0.01"></div>
+<button class="primary" onclick="createOrder()">AUFTRAG SPEICHERN</button></div><div id="orderList"></div></div></div>
+
+<div id="chef-material" class="hide"><div class="panel"><h2>Material</h2><div id="materialRequestsBoss"></div></div></div>
+
+<div id="chef-docs" class="hide"><div class="panel"><h2>Zeichnungen & Dokumente</h2><p class="muted">Zeichnungen, Pläne, PDFs und Fotos können einem Auftrag zugeordnet werden.</p>
+<div class="field"><label>Auftrag</label><select id="documentOrder"></select></div>
+<div class="filebox"><input id="bossFiles" type="file" accept="image/*,.pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" multiple onchange="saveFiles('bossFiles')"><p class="muted">Dateien auswählen.</p></div><div id="fileList"></div></div></div>
+
+<div id="chef-times" class="hide"><div class="panel"><h2>Arbeitszeiten</h2><div id="timeList"></div></div></div>
+
+<div id="chef-invoices" class="hide"><div class="panel"><div class="row"><h2>Rechnungen</h2><button class="primary pillbtn" onclick="showBox('invoiceForm')">+ RECHNUNG</button></div>
+<div id="invoiceForm" class="hide"><h3>Neue Rechnung</h3>
+<div class="field"><label>Auftrag</label><select id="invoiceOrder"></select></div><div class="field"><label>Rechnungsnummer</label><input id="invoiceNumber" placeholder="RE-2026-001"></div><div class="field"><label>Betrag brutto</label><input id="invoiceAmount" type="number" min="0" step="0.01"></div><div class="field"><label>Fällig am</label><input id="invoiceDue" type="date"></div>
+<button class="primary" onclick="createInvoice()">RECHNUNG SPEICHERN</button></div><div id="invoiceList"></div></div></div>
+
+<div id="chef-employees" class="hide"><div class="panel"><div class="row"><h2>Mitarbeiter</h2><button class="primary pillbtn" onclick="showBox('employeeForm')">+ MITARBEITER</button></div>
+<div id="employeeForm" class="hide"><div class="field"><label>Name</label><input id="newEmployeeName"></div><div class="field"><label>Rolle</label><input id="newEmployeeRole" placeholder="Geselle, Meister, Azubi..."></div><div class="field"><label>E-Mail</label><input id="newEmployeeEmail" type="email"></div><button class="primary" onclick="createEmployee()">MITARBEITER SPEICHERN</button></div><div id="employeeList"></div></div></div>
+</section>
+</main>
+
+<nav class="bottom"><button class="active" onclick="switchMode('employee',this)">Mitarbeiter</button><button onclick="switchMode('boss',this)">Chef</button></nav>
+
+<script>
+const INDUSTRIES={
+"Maler":["Wandflächen vorbereiten","Abkleben","Grundieren","Streichen","Arbeitsbereich sauber hinterlassen"],
+"Maurer":["Baustelle einrichten","Mauerwerk herstellen","Mörtel vorbereiten","Material prüfen","Baustelle reinigen"],
+"Elektriker":["Baustelle prüfen","Leitungen verlegen","Schalter/Steckdosen montieren","Messung durchführen","Dokumentation"],
+"Schreiner / Tischler":["Aufmaß nehmen","Material vorbereiten","Werkstück fertigen","Montage","Arbeitsbereich reinigen"],
+"Dachdecker":["Baustelle sichern","Dach vorbereiten","Dachziegel montieren","Abdichtung prüfen","Baustelle reinigen"],
+"Straßenbau / Tiefbau":["Baustelle sichern","Aushub","Unterbau herstellen","Pflaster/Asphalt","Baustelle reinigen"],
+"Zimmerer":["Aufmaß","Holz vorbereiten","Konstruktion montieren","Dachstuhl","Dokumentation"],
+"Sanitär / Heizung":["Baustelle prüfen","Leitungen verlegen","Montage","Dichtheitsprüfung","Dokumentation"],
+"GaLaBau":["Baustelle einrichten","Erdarbeiten","Pflasterarbeiten","Pflanzenarbeiten","Baustelle reinigen"],
+"Trockenbau":["Aufmaß","Unterkonstruktion","Platten montieren","Spachteln","Baustelle reinigen"],
+"Fenster / Montage":["Aufmaß","Ausbau","Montage","Abdichten","Übergabe"],
+"Sonstiges Handwerk":["Baustelle einrichten","Arbeit ausführen","Material prüfen","Qualitätskontrolle","Baustelle reinigen"]
+};
+const DBKEY="auftragpro_komplett_v1";
+let db=JSON.parse(localStorage.getItem(DBKEY)||"null")||{industry:"Maler",start:null,end:null,customers:[],orders:[],invoices:[],materials:[],times:[],files:[],notes:[],employees:[]};
+function persist(){localStorage.setItem(DBKEY,JSON.stringify(db))}
+function euro(n){return Number(n||0).toLocaleString("de-DE",{style:"currency",currency:"EUR"})}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function nowText(ts){return new Date(ts).toLocaleString("de-DE",{dateStyle:"short",timeStyle:"short"})}
+function showBox(id){document.getElementById(id).classList.remove("hide");document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
+function init(){
+ document.getElementById("industries").innerHTML=Object.keys(INDUSTRIES).map(x=>`<button class="industry ${x===db.industry?"active":""}" onclick="chooseIndustry('${x.replace(/'/g,"\\'")}')">${esc(x)}</button>`).join("");
+ document.getElementById("newOrderIndustry").innerHTML=Object.keys(INDUSTRIES).map(x=>`<option>${esc(x)}</option>`).join("");
+ renderTasks();renderAll();updateClock();
+}
+function chooseIndustry(x){db.industry=x;persist();init()}
+function renderTasks(){document.getElementById("tasks").innerHTML=(INDUSTRIES[db.industry]||INDUSTRIES["Sonstiges Handwerk"]).map(x=>`<label class="task"><input type="checkbox" onchange="this.parentElement.style.opacity=this.checked?.55:1"><span>${esc(x)}</span></label>`).join("")}
+function startWork(){if(db.start&&!db.end){alert("Du bist bereits eingestempelt.");return}db.start=Date.now();db.end=null;persist();updateClock()}
+function stopWork(){if(!db.start){alert("Du bist noch nicht eingestempelt.");return}if(db.end){alert("Bereits ausgestempelt.");return}db.end=Date.now();db.times.push({employee:"Aktueller Mitarbeiter",start:db.start,end:db.end,orderId:db.orders[0]?.id||null});persist();updateClock();renderAll()}
+function updateClock(){const c=document.getElementById("clock"),t=document.getElementById("stampText");if(!db.start){c.textContent="00:00:00";t.textContent="Noch nicht eingestempelt";return}const end=db.end||Date.now(),ms=Math.max(0,end-db.start),h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000),s=Math.floor(ms%60000/1000);c.textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":");t.textContent="Beginn: "+new Date(db.start).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+(db.end?" · Ende: "+new Date(db.end).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"}):" · läuft")}
+function addMaterialRequest(){const n=document.getElementById("missingName").value.trim();if(!n){alert("Bitte Material eintragen.");return}db.materials.push({id:Date.now(),name:n,qty:document.getElementById("missingQty").value||1,priority:document.getElementById("missingPriority").value,status:"offen",date:Date.now()});persist();alert("Materialanforderung gespeichert.");renderAll()}
+function saveUsedMaterial(){const n=document.getElementById("usedName").value.trim();if(!n){alert("Bitte Material eintragen.");return}alert("Material gespeichert.");document.getElementById("usedName").value="";document.getElementById("usedQty").value=""}
+function saveEmployeeNote(){const n=document.getElementById("employeeNote").value.trim();if(!n){alert("Bitte Notiz eingeben.");return}db.notes.push({id:Date.now(),text:n,date:Date.now()});persist();document.getElementById("employeeNote").value="";alert("Notiz gespeichert.")}
+function saveFiles(inputId){const input=document.getElementById(inputId);[...input.files].forEach(f=>db.files.push({id:Date.now()+Math.random(),name:f.name,size:f.size,type:f.type,date:Date.now()}));persist();renderFiles();input.value="";alert("Datei(en) gespeichert.")}
+function createCustomer(){const name=document.getElementById("newCustomerName").value.trim();if(!name){alert("Bitte Kundenname eingeben.");return}db.customers.push({id:Date.now(),name,phone:document.getElementById("newCustomerPhone").value,email:document.getElementById("newCustomerEmail").value,address:document.getElementById("newCustomerAddress").value});persist();["newCustomerName","newCustomerPhone","newCustomerEmail","newCustomerAddress"].forEach(id=>document.getElementById(id).value="");renderAll();alert("Kunde gespeichert.")}
+function createOrder(){const title=document.getElementById("newOrderTitle").value.trim();if(!title){alert("Bitte Auftrag eingeben.");return}db.orders.push({id:Date.now(),customerId:Number(document.getElementById("orderCustomer").value)||null,title,address:document.getElementById("newOrderAddress").value,industry:document.getElementById("newOrderIndustry").value,value:Number(document.getElementById("newOrderValue").value)||0,status:"offen",date:Date.now()});persist();renderAll();alert("Auftrag gespeichert.")}
+function createEmployee(){const name=document.getElementById("newEmployeeName").value.trim();if(!name){alert("Bitte Name eingeben.");return}db.employees.push({id:Date.now(),name,role:document.getElementById("newEmployeeRole").value,email:document.getElementById("newEmployeeEmail").value});persist();renderAll();alert("Mitarbeiter gespeichert.")}
+function createInvoice(){const orderId=Number(document.getElementById("invoiceOrder").value);const amount=Number(document.getElementById("invoiceAmount").value)||0;if(!orderId||amount<=0){alert("Bitte Auftrag und Betrag eingeben.");return}db.invoices.push({id:Date.now(),orderId,number:document.getElementById("invoiceNumber").value.trim()||("RE-"+Date.now()),amount,due:document.getElementById("invoiceDue").value,status:"offen",date:Date.now()});persist();renderAll();alert("Rechnung gespeichert.")}
+function markInvoice(id,status){const x=db.invoices.find(i=>i.id===id);if(x){x.status=status;persist();renderAll()}}
+function closeMaterial(id){const x=db.materials.find(m=>m.id===id);if(x)x.status="erledigt";persist();renderAll()}
+function renderCustomers(){document.getElementById("customerList").innerHTML=db.customers.length?db.customers.map(c=>`<div class="listitem"><div class="row"><b>${esc(c.name)}</b><span class="badge blue">KUNDE</span></div><div class="small muted">${esc(c.address||"Keine Adresse")} · ${esc(c.phone||"Keine Telefonnummer")}</div><div class="small">${esc(c.email||"")}</div></div>`).join(""):"<p class='muted'>Noch keine Kunden.</p>";document.getElementById("orderCustomer").innerHTML='<option value="">Kunde auswählen</option>'+db.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}
+function renderOrders(){document.getElementById("orderList").innerHTML=db.orders.length?db.orders.map(o=>{const c=db.customers.find(c=>c.id===o.customerId);return `<div class="listitem"><div class="row"><b>${esc(o.title)}</b><span class="badge green">${esc(o.status)}</span></div>${esc(c?.name||"Kein Kunde")} · ${esc(o.industry)}<br><span class="small muted">${esc(o.address||"Keine Adresse")} · ${euro(o.value)}</span></div>`}).join(""):"<p class='muted'>Noch keine Aufträge.</p>";const opts='<option value="">Auftrag auswählen</option>'+db.orders.map(o=>`<option value="${o.id}">${esc(o.title)}</option>`).join("");document.getElementById("invoiceOrder").innerHTML=opts;document.getElementById("documentOrder").innerHTML=opts}
+function renderMaterial(){const open=db.materials.filter(m=>m.status==="offen");document.getElementById("materialRequestsBoss").innerHTML=open.length?open.map(m=>`<div class="listitem"><div class="row"><b>${esc(m.name)}</b><span class="badge ${m.priority==="Sofort"||m.priority==="Dringend"?"red":"yellow"}">${esc(m.priority)}</span></div>Menge: ${esc(m.qty)}<br><button class="success pillbtn" onclick="closeMaterial(${m.id})">ERLEDIGT</button></div>`).join(""):"<p class='muted'>Keine offenen Materialanforderungen.</p>"}
+function renderFiles(){document.getElementById("fileList").innerHTML=db.files.length?db.files.map(f=>`<div class="listitem">📎 <b>${esc(f.name)}</b><div class="small muted">${esc(f.type||"Datei")} · ${Math.round(f.size/1024)} KB · ${nowText(f.date)}</div></div>`).join(""):"<p class='muted'>Noch keine Dateien.</p>"}
+function renderTimes(){document.getElementById("timeList").innerHTML=db.times.length?db.times.slice().reverse().map(t=>`<div class="listitem"><b>${esc(t.employee)}</b><br>${nowText(t.start)} – ${nowText(t.end)}<br><span class="small muted">${((t.end-t.start)/3600000).toFixed(2).replace(".",",")} Stunden</span></div>`).join(""):"<p class='muted'>Noch keine abgeschlossenen Zeiten.</p>"}
+function renderInvoices(){const box=document.getElementById("invoiceList");box.innerHTML=db.invoices.length?db.invoices.map(i=>{const o=db.orders.find(o=>o.id===i.orderId),over=i.status==="offen"&&i.due&&new Date(i.due)<new Date();return `<div class="listitem"><div class="row"><b>${esc(i.number)}</b><span class="badge ${i.status==="bezahlt"?"green":over?"red":"yellow"}">${i.status==="bezahlt"?"BEZAHLT":over?"ÜBERFÄLLIG":"OFFEN"}</span></div>${esc(o?.title||"Auftrag")} · <b>${euro(i.amount)}</b><br><span class="small muted">Fällig: ${i.due?new Date(i.due).toLocaleDateString("de-DE"):"nicht angegeben"}</span><br><br><button class="${i.status==="bezahlt"?"dark":"success"} pillbtn" onclick="markInvoice(${i.id},'${i.status==="bezahlt"?"offen":"bezahlt"}')">${i.status==="bezahlt"?"WIEDER ÖFFNEN":"ALS BEZAHLT MARKIEREN"}</button></div>`}).join(""):"<p class='muted'>Noch keine Rechnungen.</p>"}
+function renderEmployees(){document.getElementById("employeeList").innerHTML=db.employees.length?db.employees.map(e=>`<div class="listitem"><b>${esc(e.name)}</b> · ${esc(e.role||"Mitarbeiter")}<br><span class="small muted">${esc(e.email||"")}</span></div>`).join(""):"<p class='muted'>Noch keine Mitarbeiter.</p>"}
+function renderDashboard(){const open=db.invoices.filter(i=>i.status==="offen").reduce((a,i)=>a+i.amount,0),paid=db.invoices.filter(i=>i.status==="bezahlt").reduce((a,i)=>a+i.amount,0);document.getElementById("statJobs").textContent=db.orders.length;document.getElementById("statCustomers").textContent=db.customers.length;document.getElementById("statOpen").textContent=euro(open);document.getElementById("statPaid").textContent=euro(paid);const alerts=[];const mats=db.materials.filter(m=>m.status==="offen").length,over=db.invoices.filter(i=>i.status==="offen"&&i.due&&new Date(i.due)<new Date()).length;if(mats)alerts.push("🧱 "+mats+" offene Materialanforderung(en)");if(over)alerts.push("💶 "+over+" überfällige Rechnung(en)");document.getElementById("dashboardAlerts").innerHTML=alerts.length?alerts.map(x=>`<div class="listitem">${x}</div>`).join(""):"<p class='muted'>Alles erledigt.</p>"}
+function renderAll(){renderCustomers();renderOrders();renderMaterial();renderFiles();renderTimes();renderInvoices();renderEmployees();renderDashboard()}
+function chefTab(name,btn){["dashboard","customers","orders","material","docs","times","invoices","employees"].forEach(x=>document.getElementById("chef-"+x).classList.add("hide"));document.getElementById("chef-"+name).classList.remove("hide");document.querySelectorAll(".tabbar button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");}
+function switchMode(mode,btn){document.getElementById("employee").classList.toggle("hide",mode!=="employee");document.getElementById("boss").classList.toggle("hide",mode!=="boss");document.getElementById("role").textContent=mode==="boss"?"CHEF":"MITARBEITER";document.querySelectorAll(".bottom button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");if(mode==="boss")renderAll()}
+init();setInterval(updateClock,1000);
+</script>
+</body>
+</html>
